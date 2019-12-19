@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.bean;
-
-import java.util.List;
+package ink.lsq.polar.cache.core.proxy;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public class CacheAbleProcessPutMethodParam extends CacheAbleProcessParam {
+public class CacheNameNotFoundException extends Exception {
 
-    private Object cacheObject;
-
-    public CacheAbleProcessPutMethodParam(String cacheName, List<String> cacheKey, List<Object> methodArgs, Object cacheObject) {
-        super(cacheName, cacheKey, methodArgs);
-        this.cacheObject = cacheObject;
+    public CacheNameNotFoundException() {
+        super("CacheName not found!");
     }
 }

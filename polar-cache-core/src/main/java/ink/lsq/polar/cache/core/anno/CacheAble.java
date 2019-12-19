@@ -19,7 +19,6 @@ package ink.lsq.polar.cache.core.anno;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author wdxq liu.shenq@gmail.com
@@ -32,11 +31,5 @@ public @interface CacheAble {
     String value();
 
     String cacheKey() default StringUtils.EMPTY;
-
-    long expireTime() default 0;
-
-    TimeUnit expireTimeUnit() default TimeUnit.SECONDS;
-
-    int maxCacheItems() default Integer.MAX_VALUE;
 
 }

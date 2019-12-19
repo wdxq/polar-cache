@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.anno;
-
-import java.lang.annotation.*;
+package ink.lsq.polar.cache.core.velocity;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface CacheClearBatch {
+public class VelocityProperties {
 
-    CacheClear[] value();
+    private int parserPoolSize = 20;
+
+    public int getParserPoolSize() {
+        return parserPoolSize;
+    }
+
+    public void setParserPoolSize(int parserPoolSize) {
+        this.parserPoolSize = parserPoolSize;
+    }
 
 }

@@ -17,14 +17,13 @@
 package ink.lsq.polar.cache.core.bean;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
 public class CacheAbleProcessGetMethodParam extends CacheAbleProcessParam {
 
-    public CacheAbleProcessGetMethodParam(String cacheName, List<Object> methodArgs, Object cacheKey, long expireTime, TimeUnit expireTimeUnit) {
-        super(cacheName, methodArgs, cacheKey, expireTime, expireTimeUnit);
+    public CacheAbleProcessGetMethodParam(String cacheName, List<String> cacheKey, List<Object> methodArgs) {
+        super(cacheName, cacheKey, methodArgs);
     }
 }

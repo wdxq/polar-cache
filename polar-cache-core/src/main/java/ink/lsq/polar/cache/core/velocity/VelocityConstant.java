@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.bean;
-
-import java.util.List;
+package ink.lsq.polar.cache.core.velocity;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public class CacheAbleProcessPutMethodParam extends CacheAbleProcessParam {
+public class VelocityConstant {
 
-    private Object cacheObject;
+    public static final String LOG_TAG = "";
 
-    public CacheAbleProcessPutMethodParam(String cacheName, List<String> cacheKey, List<Object> methodArgs, Object cacheObject) {
-        super(cacheName, cacheKey, methodArgs);
-        this.cacheObject = cacheObject;
-    }
+    public static final String PARAM_ARGS_KEY = "args";
+
+    public static final String PARAM_CACHEKEY_KEY = "cacheKey";
+
+    public static final String COMMON_PARAM_CACHEKEY_SET_STR = "#set($" + PARAM_CACHEKEY_KEY + "=\"%s\")";
+
 }

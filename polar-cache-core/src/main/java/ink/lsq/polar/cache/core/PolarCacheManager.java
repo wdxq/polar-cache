@@ -16,8 +16,55 @@
 
 package ink.lsq.polar.cache.core;
 
+import ink.lsq.polar.cache.core.process.CacheAbleProcess;
+import ink.lsq.polar.cache.core.process.CacheClearProcess;
+import ink.lsq.polar.cache.core.velocity.VelocityManager;
+import ink.lsq.polar.cache.core.velocity.VelocityProperties;
+
+import java.util.List;
+
 /**
  * @author wdxq liu.shenq@gmail.com
  */
 public class PolarCacheManager {
+
+    private static volatile PolarCacheManager instance;
+
+    private VelocityManager velocityManager;
+
+    private List<CacheAbleProcess> cacheAbleProcessList;
+
+    private List<CacheClearProcess> cacheClearProcessList;
+
+    private PolarCacheManager() {
+    }
+
+    public static PolarCacheManager getInstance() {
+        if (null == instance) {
+            synchronized (PolarCacheManager.class) {
+                if (null == instance) {
+                    instance = new PolarCacheManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void init(VelocityProperties velocityProperties, List<CacheAbleProcess> cacheAbleProcessList, List<CacheClearProcess> cacheClearProcessList) {
+        this.velocityManager = new VelocityManager(velocityProperties);
+        this.cacheAbleProcessList = cacheAbleProcessList;
+        this.cacheClearProcessList = cacheClearProcessList;
+    }
+
+    public VelocityManager getVelocityManager() {
+        return velocityManager;
+    }
+
+    public List<CacheAbleProcess> getCacheAbleProcessList() {
+        return cacheAbleProcessList;
+    }
+
+    public List<CacheClearProcess> getCacheClearProcessList() {
+        return cacheClearProcessList;
+    }
 }
