@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class CacheAbleProcessGetMethodParam extends CacheAbleProcessParam {
 
-    public CacheAbleProcessGetMethodParam(String cacheName, List<String> cacheKey, List<Object> methodArgs) {
-        super(cacheName, cacheKey, methodArgs);
+    public CacheAbleProcessGetMethodParam(String cacheName, List<Object> methodArgs, String cacheKey) {
+        super(cacheName, methodArgs, cacheKey);
     }
 }

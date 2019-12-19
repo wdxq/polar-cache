@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.bean;
-
-import java.util.List;
+package ink.lsq.polar.cache.ehcache;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public class CacheAbleProcessPutMethodParam extends CacheAbleProcessParam {
+public class EhcacheProperties {
 
-    private Object cacheObject;
+    private String xmlFile;
 
-    public CacheAbleProcessPutMethodParam(String cacheName, List<Object> methodArgs, String cacheKey, Object cacheObject) {
-        super(cacheName, methodArgs, cacheKey);
-        this.cacheObject = cacheObject;
+    public String getXmlFile() {
+        return xmlFile;
     }
 
-    public Object getCacheObject() {
-        return cacheObject;
+    public void setXmlFile(String xmlFile) {
+        this.xmlFile = xmlFile;
     }
 }

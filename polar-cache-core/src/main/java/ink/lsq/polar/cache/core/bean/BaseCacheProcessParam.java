@@ -25,22 +25,15 @@ public abstract class BaseCacheProcessParam {
 
     private String cacheName;
 
-    private List<String> cacheKey;
-
     private List<Object> methodArgs;
 
-    public BaseCacheProcessParam(String cacheName, List<String> cacheKey, List<Object> methodArgs) {
+    public BaseCacheProcessParam(String cacheName, List<Object> methodArgs) {
         this.cacheName = cacheName;
-        this.cacheKey = cacheKey;
         this.methodArgs = methodArgs;
     }
 
     public String getCacheName() {
         return cacheName;
-    }
-
-    public List<String> getCacheKey() {
-        return cacheKey;
     }
 
     public List<Object> getMethodArgs() {

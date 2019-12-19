@@ -49,7 +49,33 @@ public class VelocityManager {
         }
     }
 
-    public List<String> evaluate(String velocityStr, Object[] args) throws VelocityEvaluateException {
+    public String evaluateForString(String velocityStr, Object[] args) throws VelocityEvaluateException {
+        Object cacheKey = evaluate(velocityStr, args);
+        if (!(cacheKey instanceof String)) {
+            throw new VelocityEvaluateException("cacheKey Type mast be String. ");
+        }
+        return (String) cacheKey;
+    }
+
+    public List<String> evaluateForList(String velocityStr, Object[] args) throws VelocityEvaluateException {
+        Object cacheKey = evaluate(velocityStr, args);
+        if (cacheKey instanceof String) {
+            return List.of((String) cacheKey);
+        }
+        if (cacheKey instanceof Collection) {
+            List<String> result = new ArrayList<>();
+            for (Object currentKey : ((Collection) cacheKey)) {
+                if (!(currentKey instanceof String)) {
+                    throw new VelocityEvaluateException("cacheKey Type mast be String or Collection<String>. ");
+                }
+                result.add((String) currentKey);
+            }
+            return result;
+        }
+        throw new VelocityEvaluateException("cacheKey Type mast be String or Collection<String>. ");
+    }
+
+    private Object evaluate(String velocityStr, Object[] args) throws VelocityEvaluateException {
         Map<String, Object> param = new HashMap<>();
         StringWriter out = null;
         try {
@@ -78,20 +104,7 @@ public class VelocityManager {
         if (null == cacheKey) {
             throw new VelocityEvaluateException("cacheKey not found. ");
         }
-        if (cacheKey instanceof String) {
-            return List.of((String) cacheKey);
-        }
-        if (cacheKey instanceof Collection) {
-            List<String> result = new ArrayList<>();
-            for (Object currentKey : ((Collection) cacheKey)) {
-                if (!(currentKey instanceof String)) {
-                    throw new VelocityEvaluateException("cacheKey Type mast be String or Collection<String>. ");
-                }
-                result.add((String) currentKey);
-            }
-            return result;
-        }
-        throw new VelocityEvaluateException("cacheKey Type mast be String or Collection<String>. ");
+        return cacheKey;
     }
 
 }

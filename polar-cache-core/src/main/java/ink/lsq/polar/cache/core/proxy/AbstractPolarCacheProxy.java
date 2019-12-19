@@ -73,17 +73,17 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
         }
 
-        List<String> cacheKey = null;
+        String cacheKey = null;
         if (StringUtils.isNotBlank(cacheAble.cacheKey())) {
-            cacheKey = velocityManager.evaluate(cacheAble.cacheKey(), args);
+            cacheKey = velocityManager.evaluateForString(cacheAble.cacheKey(), args);
         }
 
         for (int i = 0; i < cacheAbleProcessList.size(); i++) {
 
             result = cacheAbleProcessList.get(i).get(new CacheAbleProcessGetMethodParam(
                     cacheAble.value(),
-                    cacheKey,
-                    argsList
+                    argsList,
+                    cacheKey
             ));
 
             if (null != result) {
@@ -93,8 +93,8 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
                     addResult = cacheAbleProcessList.get(j).put(new CacheAbleProcessPutMethodParam(
                             cacheAble.value(),
-                            cacheKey,
                             argsList,
+                            cacheKey,
                             result
                     ));
 
@@ -117,8 +117,8 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
                     // 执行缓存处理器的添加操作
                     addResult = cacheAbleProcessList.get(i).put(new CacheAbleProcessPutMethodParam(
                             cacheAble.value(),
-                            cacheKey,
                             argsList,
+                            cacheKey,
                             result
                     ));
 
@@ -163,7 +163,7 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
         List<String> cacheKey = null;
         if (StringUtils.isNotBlank(cacheClear.cacheKey())) {
-            cacheKey = velocityManager.evaluate(cacheClear.cacheKey(), args);
+            cacheKey = velocityManager.evaluateForList(cacheClear.cacheKey(), args);
         }
 
         boolean clearResult = true;
@@ -171,8 +171,8 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
             clearResult = cacheClearProcessList.get(i).clear(new CacheClearProcessParam(
                     cacheClear.value(),
-                    cacheKey,
-                    argsList
+                    argsList,
+                    cacheKey
             ));
 
         }

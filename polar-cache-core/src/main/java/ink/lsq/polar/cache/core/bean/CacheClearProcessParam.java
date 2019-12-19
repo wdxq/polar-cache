@@ -23,7 +23,14 @@ import java.util.List;
  */
 public class CacheClearProcessParam extends BaseCacheProcessParam {
 
-    public CacheClearProcessParam(String cacheName, List<String> cacheKey, List<Object> methodArgs) {
-        super(cacheName, cacheKey, methodArgs);
+    private List<String> cacheKey;
+
+    public CacheClearProcessParam(String cacheName, List<Object> methodArgs, List<String> cacheKey) {
+        super(cacheName, methodArgs);
+        this.cacheKey = cacheKey;
+    }
+
+    public List<String> getCacheKey() {
+        return cacheKey;
     }
 }

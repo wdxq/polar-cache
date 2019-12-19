@@ -23,7 +23,14 @@ import java.util.List;
  */
 public abstract class CacheAbleProcessParam extends BaseCacheProcessParam {
 
-    public CacheAbleProcessParam(String cacheName, List<String> cacheKey, List<Object> methodArgs) {
-        super(cacheName, cacheKey, methodArgs);
+    private String cacheKey;
+
+    public CacheAbleProcessParam(String cacheName, List<Object> methodArgs, String cacheKey) {
+        super(cacheName, methodArgs);
+        this.cacheKey = cacheKey;
+    }
+
+    public String getCacheKey() {
+        return cacheKey;
     }
 }
