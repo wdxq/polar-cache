@@ -58,6 +58,8 @@ public class EhcacheCacheAbleProcess extends AbstractEhcacheProcess implements C
                 cache.put(DEFAULT_CACHE_KEY, cacheObject);
             }
 
+            CACHE_VALUE_CLASS_MAP.put(cacheName, valueClass);
+
             return true;
 
         } catch (Exception e) {

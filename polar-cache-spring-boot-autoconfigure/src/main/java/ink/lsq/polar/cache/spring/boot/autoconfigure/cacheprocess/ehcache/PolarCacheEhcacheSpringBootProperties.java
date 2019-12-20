@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
+package ink.lsq.polar.cache.spring.boot.autoconfigure.cacheprocess.ehcache;
 
-import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+@ConfigurationProperties(prefix = "polar.cache.ehcache")
+public class PolarCacheEhcacheSpringBootProperties {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    private String xmlFile;
 
-    Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    public String getXmlFile() {
+        return xmlFile;
+    }
 
+    public void setXmlFile(String xmlFile) {
+        this.xmlFile = xmlFile;
+    }
 }

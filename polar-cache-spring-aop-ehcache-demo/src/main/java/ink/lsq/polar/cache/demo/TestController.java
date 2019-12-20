@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
+package ink.lsq.polar.cache.demo;
 
-import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+@RestController
+public class TestController {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    private final TestDao testDao;
 
-    Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    @Autowired
+    public TestController(TestDao testDao) {
+        this.testDao = testDao;
+    }
+
+    @GetMapping("/test")
+    public TestResponse test(String param, String param2) {
+        return new TestResponse(testDao.testSelect(param, param2));
+    }
 
 }

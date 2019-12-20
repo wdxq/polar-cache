@@ -40,16 +40,13 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractPolarCacheProxy.class);
 
-    private final VelocityManager velocityManager;
+    private VelocityManager velocityManager;
 
-    private final List<CacheAbleProcess> cacheAbleProcessList;
+    private List<CacheAbleProcess> cacheAbleProcessList;
 
-    private final List<CacheClearProcess> cacheClearProcessList;
+    private List<CacheClearProcess> cacheClearProcessList;
 
     protected AbstractPolarCacheProxy() {
-        this.velocityManager = PolarCacheManager.getInstance().getVelocityManager();
-        this.cacheAbleProcessList = PolarCacheManager.getInstance().getCacheAbleProcessList();
-        this.cacheClearProcessList = PolarCacheManager.getInstance().getCacheClearProcessList();
     }
 
     @Override
@@ -75,7 +72,14 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
         String cacheKey = null;
         if (StringUtils.isNotBlank(cacheAble.cacheKey())) {
+            if (null == velocityManager) {
+                velocityManager = PolarCacheManager.getInstance().getVelocityManager();
+            }
             cacheKey = velocityManager.evaluateForString(cacheAble.cacheKey(), args);
+        }
+
+        if (null == cacheAbleProcessList) {
+            cacheAbleProcessList = PolarCacheManager.getInstance().getCacheAbleProcessList();
         }
 
         for (int i = 0; i < cacheAbleProcessList.size(); i++) {
@@ -132,7 +136,7 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
     }
 
     @Override
-    public void cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable {
+    public Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable {
 
         if (StringUtils.isBlank(cacheClear.value())) {
             throw new CacheNameNotFoundException();
@@ -155,14 +159,21 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
             if (null != methodCallException) {
                 throw methodCallException;
             }
-            return;
+            return result;
         }
 
         List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : List.of(args);
 
         List<String> cacheKey = null;
         if (StringUtils.isNotBlank(cacheClear.cacheKey())) {
+            if (null == velocityManager) {
+                velocityManager = PolarCacheManager.getInstance().getVelocityManager();
+            }
             cacheKey = velocityManager.evaluateForList(cacheClear.cacheKey(), args);
+        }
+
+        if (null == cacheClearProcessList) {
+            cacheClearProcessList = PolarCacheManager.getInstance().getCacheClearProcessList();
         }
 
         boolean clearResult = true;
@@ -179,6 +190,8 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
         if (null != methodCallException) {
             throw methodCallException;
         }
+
+        return result;
 
     }
 }

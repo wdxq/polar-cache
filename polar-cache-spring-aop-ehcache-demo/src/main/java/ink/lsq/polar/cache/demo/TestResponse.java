@@ -14,20 +14,27 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
-
-import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+package ink.lsq.polar.cache.demo;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+public class TestResponse {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    private String message;
 
-    Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    public TestResponse() {
+    }
 
+    public TestResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

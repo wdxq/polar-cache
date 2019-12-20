@@ -25,17 +25,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>polar-cache-ehcache</artifactId>
+    <artifactId>polar-cache-spring-aop-ehcache-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>ink.lsq.polar.cache</groupId>
-            <artifactId>polar-cache-core</artifactId>
+            <artifactId>polar-cache-spring-boot-autoconfigure</artifactId>
             <version>${framework-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
+            <groupId>ink.lsq.polar.cache</groupId>
+            <artifactId>polar-cache-ehcache</artifactId>
+            <version>${framework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.lsq.polar.cache</groupId>
+            <artifactId>polar-cache-proxy-spring-aop</artifactId>
+            <version>${framework-version}</version>
         </dependency>
     </dependencies>
 

@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
+package ink.lsq.polar.cache.spring.boot.autoconfigure;
 
-import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+import ink.lsq.polar.cache.core.velocity.VelocityProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+@ConfigurationProperties(prefix = "polar.cache")
+public class PolarCacheManagerSpringBootProperties {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    private VelocityProperties velocity = new VelocityProperties();
 
-    Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    public VelocityProperties getVelocity() {
+        return velocity;
+    }
 
+    public void setVelocity(VelocityProperties velocity) {
+        this.velocity = velocity;
+    }
 }

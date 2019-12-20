@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
+package ink.lsq.polar.cache.demo;
 
 import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+@Repository
+public class TestDao {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
-
-    Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    @CacheAble(value = "DemoCache", cacheKey = "$args[0]-$args[1]")
+    public String testSelect(String param, String param2) {
+        return "Hello World! " + param;
+    }
 
 }

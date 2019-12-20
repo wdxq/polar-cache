@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: PolarCacheSpringAopEhcacheDemo
+
+server:
+  port: 8080
+  servlet:
+    context-path: /PolarCacheSpringAopEhcacheDemo
+
+polar:
+  cache:
+    ehcache:
+      xmlFile: /ehcache.xml

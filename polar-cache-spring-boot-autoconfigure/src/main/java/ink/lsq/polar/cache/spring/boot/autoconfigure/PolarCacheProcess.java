@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
-
-import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+package ink.lsq.polar.cache.spring.boot.autoconfigure;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+public enum PolarCacheProcess {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    EHCACHE("ink.lsq.polar.cache.spring.boot.autoconfigure.cacheprocess.ehcache.PolarCacheEhcacheAutoConfiguration");
 
-    Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    private String autoConfigurationClass;
 
+    PolarCacheProcess(String autoConfigurationClass) {
+        this.autoConfigurationClass = autoConfigurationClass;
+    }
+
+    public String getAutoConfigurationClass() {
+        return autoConfigurationClass;
+    }
 }
