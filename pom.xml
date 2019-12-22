@@ -30,7 +30,7 @@
     <groupId>ink.lsq.polar.cache</groupId>
     <artifactId>polar-cache</artifactId>
     <packaging>pom</packaging>
-    <version>${framework-version}</version>
+    <version>1.0-SNAPSHOT</version>
     <modules>
         <module>polar-cache-core</module>
         <module>polar-cache-ehcache</module>
@@ -39,10 +39,6 @@
         <module>polar-cache-spring-aop-ehcache-starter</module>
         <module>polar-cache-spring-aop-ehcache-demo</module>
     </modules>
-
-    <properties>
-        <framework-version>1.0-SNAPSHOT</framework-version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -66,5 +62,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://lsq-mbp:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://lsq-mbp:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
