@@ -58,9 +58,9 @@ public class TestDao {
         return false;
     }
 
-    @CacheClear(value = "DemoCache", clearWhenExceptionIsThrown = true)
-    public boolean testClearWhenExceptionIsThrown() {
-        throw new RuntimeException("test");
+    @CacheClear(value = "DemoCache", clearWhenExceptionIsThrown = {RuntimeException.class, CustomException.class})
+    public boolean testClearWhenExceptionIsThrown() throws Exception {
+        throw new Exception();
     }
 
 }

@@ -152,13 +152,21 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
         }
 
         Object result = null;
-        Exception methodCallException = null;
+        Throwable methodCallException = null;
 
-        if (cacheClear.clearWhenExceptionIsThrown()) {
+        if (cacheClear.clearWhenExceptionIsThrown().length > 0) {
             try {
                 result = action.doInPolarCacheProxy();
-            } catch (Exception e) {
-                methodCallException = e;
+            } catch (Throwable e) {
+                for (Class<? extends Throwable> aClass : cacheClear.clearWhenExceptionIsThrown()) {
+                    if (aClass.isInstance(e)) {
+                        methodCallException = e;
+                        break;
+                    }
+                }
+                if (methodCallException == null) {
+                    throw e;
+                }
             }
         } else {
             result = action.doInPolarCacheProxy();

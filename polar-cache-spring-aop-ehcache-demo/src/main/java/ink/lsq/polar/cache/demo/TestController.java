@@ -67,7 +67,12 @@ public class TestController {
 
     @GetMapping("/testClearWhenExceptionIsThrown")
     public TestResponse testClearWhenExceptionIsThrown() {
-        return new TestResponse(String.valueOf(testDao.testClearWhenExceptionIsThrown()));
+        try {
+            return new TestResponse(String.valueOf(testDao.testClearWhenExceptionIsThrown()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new TestResponse("fail");
+        }
     }
 
 }

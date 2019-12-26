@@ -14,30 +14,10 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.anno;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.lang.annotation.*;
+package ink.lsq.polar.cache.demo;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface CacheClear {
-
-    String value();
-
-    String cacheKey() default StringUtils.EMPTY;
-
-    String cacheKeyList() default StringUtils.EMPTY;
-
-    String cacheKeyRegularExpression() default StringUtils.EMPTY;
-
-    boolean valBooleanReturn() default false;
-
-    Class<? extends Throwable>[] clearWhenExceptionIsThrown() default {};
-
+public class CustomException extends Exception {
 }
