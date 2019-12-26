@@ -43,9 +43,24 @@ public class TestDao {
         return true;
     }
 
-    @CacheClear(value = "DemoCache", cacheKeyRegularExpression = "$args[0].*")
-    public boolean testClearByRegularExpression(String param, String param2) {
+    @CacheClear(value = "DemoCache", cacheKeyRegularExpression = "$args[0]-.*")
+    public boolean testClearByRegularExpression(String param) {
         return true;
+    }
+
+    @CacheClear(value = "DemoCache")
+    public boolean testClearAll() {
+        return true;
+    }
+
+    @CacheClear(value = "DemoCache", valBooleanReturn = true)
+    public boolean testClearValBooleanReturn() {
+        return false;
+    }
+
+    @CacheClear(value = "DemoCache", clearWhenExceptionIsThrown = true)
+    public boolean testClearWhenExceptionIsThrown() {
+        throw new RuntimeException("test");
     }
 
 }

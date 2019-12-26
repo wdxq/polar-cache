@@ -51,8 +51,23 @@ public class TestController {
     }
 
     @GetMapping("/testClearByRegularExpression")
-    public TestResponse testClearByRegularExpression(String param, String param2) {
-        return new TestResponse(String.valueOf(testDao.testClearByRegularExpression(param, param2)));
+    public TestResponse testClearByRegularExpression(String param) {
+        return new TestResponse(String.valueOf(testDao.testClearByRegularExpression(param)));
+    }
+
+    @GetMapping("/testClearAll")
+    public TestResponse testClearAll() {
+        return new TestResponse(String.valueOf(testDao.testClearAll()));
+    }
+
+    @GetMapping("/testClearValBooleanReturn")
+    public TestResponse testClearValBooleanReturn() {
+        return new TestResponse(String.valueOf(testDao.testClearValBooleanReturn()));
+    }
+
+    @GetMapping("/testClearWhenExceptionIsThrown")
+    public TestResponse testClearWhenExceptionIsThrown() {
+        return new TestResponse(String.valueOf(testDao.testClearWhenExceptionIsThrown()));
     }
 
 }
