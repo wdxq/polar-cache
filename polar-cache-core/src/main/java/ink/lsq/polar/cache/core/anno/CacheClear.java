@@ -32,6 +32,10 @@ public @interface CacheClear {
 
     String cacheKey() default StringUtils.EMPTY;
 
+    String cacheKeyList() default StringUtils.EMPTY;
+
+    String cacheKeyRegularExpression() default StringUtils.EMPTY;
+
     boolean valBooleanReturn() default false;
 
     boolean clearWhenExceptionIsThrown() default false;

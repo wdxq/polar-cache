@@ -17,20 +17,35 @@
 package ink.lsq.polar.cache.core.bean;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
 public class CacheClearProcessParam extends BaseCacheProcessParam {
 
-    private List<String> cacheKey;
+    private boolean isClearAll;
 
-    public CacheClearProcessParam(String cacheName, List<Object> methodArgs, List<String> cacheKey) {
+    private Set<String> cacheKey;
+
+    private String cacheKeyRegularExpression;
+
+    public CacheClearProcessParam(String cacheName, List<Object> methodArgs, boolean isClearAll, Set<String> cacheKey, String cacheKeyRegularExpression) {
         super(cacheName, methodArgs);
+        this.isClearAll = isClearAll;
         this.cacheKey = cacheKey;
+        this.cacheKeyRegularExpression = cacheKeyRegularExpression;
     }
 
-    public List<String> getCacheKey() {
+    public boolean isClearAll() {
+        return isClearAll;
+    }
+
+    public Set<String> getCacheKey() {
         return cacheKey;
+    }
+
+    public String getCacheKeyRegularExpression() {
+        return cacheKeyRegularExpression;
     }
 }

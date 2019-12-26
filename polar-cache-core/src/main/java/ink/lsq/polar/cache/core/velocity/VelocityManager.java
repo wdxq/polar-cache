@@ -50,32 +50,29 @@ public class VelocityManager {
     }
 
     public String evaluateForString(String velocityStr, Object[] args) throws VelocityEvaluateException {
-        Object cacheKey = evaluate(velocityStr, args);
-        if (!(cacheKey instanceof String)) {
+        Object cacheKey = evaluate(String.format(VelocityConstant.STRING_SET_STR, velocityStr), args);
+        if (cacheKey instanceof String) {
+            return (String) cacheKey;
+        } else {
             throw new VelocityEvaluateException("cacheKey Type mast be String. ");
         }
-        return (String) cacheKey;
     }
 
-    public List<String> evaluateForList(String velocityStr, Object[] args) throws VelocityEvaluateException {
-        Object cacheKey = evaluate(velocityStr, args);
-        if (cacheKey instanceof String) {
-            return List.of((String) cacheKey);
-        }
-        if (cacheKey instanceof Collection) {
-            List<String> result = new ArrayList<>();
-            for (Object currentKey : ((Collection) cacheKey)) {
-                if (!(currentKey instanceof String)) {
-                    throw new VelocityEvaluateException("cacheKey Type mast be String or Collection<String>. ");
-                }
-                result.add((String) currentKey);
+    public Set<String> evaluateForSet(String velocityStr, Object[] args) throws VelocityEvaluateException {
+        Object cacheKeyList = evaluate(String.format(VelocityConstant.OBJECT_SET_STR, velocityStr), args);
+        if (cacheKeyList instanceof Collection) {
+            Collection collection = (Collection) cacheKeyList;
+            Set<String> result = new HashSet<>(collection.size());
+            for (Object currentKey : collection) {
+                result.add(currentKey.toString());
             }
             return result;
+        } else {
+            throw new VelocityEvaluateException("cacheKeyList Type mast be Collection<Object with toString method>. ");
         }
-        throw new VelocityEvaluateException("cacheKey Type mast be String or Collection<String>. ");
     }
 
-    private Object evaluate(String velocityStr, Object[] args) throws VelocityEvaluateException {
+    private Object evaluate(String velocityStr, Object[] args) {
         Map<String, Object> param = new HashMap<>();
         StringWriter out = null;
         try {
@@ -86,10 +83,7 @@ public class VelocityManager {
                     velocityContext,
                     out,
                     VelocityConstant.LOG_TAG,
-                    String.format(
-                            VelocityConstant.COMMON_PARAM_CACHEKEY_SET_STR,
-                            velocityStr
-                    )
+                    velocityStr
             );
         } finally {
             if (null != out) {
@@ -100,11 +94,7 @@ public class VelocityManager {
                 }
             }
         }
-        Object cacheKey = param.get(VelocityConstant.PARAM_CACHEKEY_KEY);
-        if (null == cacheKey) {
-            throw new VelocityEvaluateException("cacheKey not found. ");
-        }
-        return cacheKey;
+        return param.get(VelocityConstant.RES_KEY);
     }
 
 }

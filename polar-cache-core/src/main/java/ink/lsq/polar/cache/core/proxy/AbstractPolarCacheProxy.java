@@ -31,7 +31,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wdxq liu.shenq@gmail.com
@@ -51,6 +53,13 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
     @Override
     public Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable {
+
+        if (null == velocityManager) {
+            velocityManager = PolarCacheManager.getInstance().getVelocityManager();
+        }
+        if (null == cacheAbleProcessList) {
+            cacheAbleProcessList = PolarCacheManager.getInstance().getCacheAbleProcessList();
+        }
 
         if (StringUtils.isBlank(cacheAble.value())) {
             throw new CacheNameNotFoundException();
@@ -72,14 +81,7 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
         String cacheKey = null;
         if (StringUtils.isNotBlank(cacheAble.cacheKey())) {
-            if (null == velocityManager) {
-                velocityManager = PolarCacheManager.getInstance().getVelocityManager();
-            }
             cacheKey = velocityManager.evaluateForString(cacheAble.cacheKey(), args);
-        }
-
-        if (null == cacheAbleProcessList) {
-            cacheAbleProcessList = PolarCacheManager.getInstance().getCacheAbleProcessList();
         }
 
         for (int i = 0; i < cacheAbleProcessList.size(); i++) {
@@ -138,6 +140,13 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
     @Override
     public Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable {
 
+        if (null == velocityManager) {
+            velocityManager = PolarCacheManager.getInstance().getVelocityManager();
+        }
+        if (null == cacheClearProcessList) {
+            cacheClearProcessList = PolarCacheManager.getInstance().getCacheClearProcessList();
+        }
+
         if (StringUtils.isBlank(cacheClear.value())) {
             throw new CacheNameNotFoundException();
         }
@@ -164,16 +173,16 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
 
         List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : List.of(args);
 
-        List<String> cacheKey = null;
+        Set<String> cacheKey = new HashSet<>();
+        String cacheKeyRegularExpression = StringUtils.EMPTY;
         if (StringUtils.isNotBlank(cacheClear.cacheKey())) {
-            if (null == velocityManager) {
-                velocityManager = PolarCacheManager.getInstance().getVelocityManager();
-            }
-            cacheKey = velocityManager.evaluateForList(cacheClear.cacheKey(), args);
+            cacheKey.add(velocityManager.evaluateForString(cacheClear.cacheKey(), args));
         }
-
-        if (null == cacheClearProcessList) {
-            cacheClearProcessList = PolarCacheManager.getInstance().getCacheClearProcessList();
+        if (StringUtils.isNotBlank(cacheClear.cacheKeyList())) {
+            cacheKey.addAll(velocityManager.evaluateForSet(cacheClear.cacheKeyList(), args));
+        }
+        if (StringUtils.isNotBlank(cacheClear.cacheKeyRegularExpression())) {
+            cacheKeyRegularExpression = velocityManager.evaluateForString(cacheClear.cacheKeyRegularExpression(), args);
         }
 
         boolean clearResult = true;
@@ -182,7 +191,11 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
             clearResult = cacheClearProcessList.get(i).clear(new CacheClearProcessParam(
                     cacheClear.value(),
                     argsList,
-                    cacheKey
+                    StringUtils.EMPTY.equals(cacheClear.cacheKey())
+                            && StringUtils.EMPTY.equals(cacheClear.cacheKeyList())
+                            && StringUtils.EMPTY.equals(cacheClear.cacheKeyRegularExpression()),
+                    cacheKey,
+                    cacheKeyRegularExpression
             ));
 
         }

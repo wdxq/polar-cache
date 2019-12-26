@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author wdxq liu.shenq@gmail.com
  */
@@ -36,6 +38,21 @@ public class TestController {
     @GetMapping("/test")
     public TestResponse test(String param, String param2) {
         return new TestResponse(testDao.testSelect(param, param2));
+    }
+
+    @GetMapping("/testClear")
+    public TestResponse testClear(String param, String param2) {
+        return new TestResponse(String.valueOf(testDao.testClear(param, param2)));
+    }
+
+    @GetMapping("/testClearByList")
+    public TestResponse testClearByList(String param, String param2) {
+        return new TestResponse(String.valueOf(testDao.testClearByList(List.of(param, param2))));
+    }
+
+    @GetMapping("/testClearByRegularExpression")
+    public TestResponse testClearByRegularExpression(String param, String param2) {
+        return new TestResponse(String.valueOf(testDao.testClearByRegularExpression(param, param2)));
     }
 
 }

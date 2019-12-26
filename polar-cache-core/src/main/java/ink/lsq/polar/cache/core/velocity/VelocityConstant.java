@@ -25,8 +25,12 @@ public class VelocityConstant {
 
     public static final String PARAM_ARGS_KEY = "args";
 
-    public static final String PARAM_CACHEKEY_KEY = "cacheKey";
+    public static final String RES_KEY = "res";
 
-    public static final String COMMON_PARAM_CACHEKEY_SET_STR = "#set($" + PARAM_CACHEKEY_KEY + "=\"%s\")";
+    private static final String SET_STR_PREFIX = "#set($" + RES_KEY + "=";
+
+    public static final String STRING_SET_STR = SET_STR_PREFIX + "\"%s\")";
+
+    public static final String OBJECT_SET_STR = SET_STR_PREFIX + "%s)";
 
 }

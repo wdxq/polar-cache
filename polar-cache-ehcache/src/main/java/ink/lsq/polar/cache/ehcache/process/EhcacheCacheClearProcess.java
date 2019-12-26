@@ -18,12 +18,14 @@ package ink.lsq.polar.cache.ehcache.process;
 
 import ink.lsq.polar.cache.core.bean.CacheClearProcessParam;
 import ink.lsq.polar.cache.core.process.CacheClearProcess;
+import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * @author wdxq liu.shenq@gmail.com
@@ -38,14 +40,15 @@ public class EhcacheCacheClearProcess extends AbstractEhcacheProcess implements 
         try {
 
             String cacheName = param.getCacheName();
-            List<String> cacheKey = param.getCacheKey();
+            Set<String> cacheKey = param.getCacheKey();
+            String cacheKeyRegularExpression = param.getCacheKeyRegularExpression();
 
             Class<?> valueClass = CACHE_VALUE_CLASS_MAP.get(cacheName);
             if (null == valueClass) {
                 return true;
             }
 
-            Cache cache = cacheManager.getCache(cacheName, CACHE_KEY_TYPE, valueClass);
+            Cache<String, ?> cache = (Cache<String, ?>) cacheManager.getCache(cacheName, CACHE_KEY_TYPE, valueClass);
             if (null == cache) {
                 logger.warn(
                         "Ehcache clear fail. Ehcache cache object not found! cacheName:{} keyClass:{}, valueClass:{}",
@@ -56,10 +59,25 @@ public class EhcacheCacheClearProcess extends AbstractEhcacheProcess implements 
                 return false;
             }
 
-            if (cacheKey == null || cacheKey.size() == 0) {
+            if (param.isClearAll()) {
                 cache.clear();
-            } else {
-                cache.removeAll(new HashSet<>(cacheKey));
+                return true;
+            }
+
+            if (null != cacheKey && cacheKey.size() > 0) {
+                cache.removeAll(cacheKey);
+            }
+
+            if (StringUtils.isNotBlank(cacheKeyRegularExpression)) {
+                Set<String> matchCacheKey = new HashSet<>();
+                for (Cache.Entry<String, ?> entry : cache) {
+                    if (Pattern.matches(cacheKeyRegularExpression, entry.getKey())) {
+                        matchCacheKey.add(entry.getKey());
+                    }
+                }
+                if (matchCacheKey.size() > 0) {
+                    cache.removeAll(matchCacheKey);
+                }
             }
 
             return true;

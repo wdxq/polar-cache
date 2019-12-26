@@ -17,7 +17,10 @@
 package ink.lsq.polar.cache.demo;
 
 import ink.lsq.polar.cache.core.anno.CacheAble;
+import ink.lsq.polar.cache.core.anno.CacheClear;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author wdxq liu.shenq@gmail.com
@@ -27,7 +30,22 @@ public class TestDao {
 
     @CacheAble(value = "DemoCache", cacheKey = "$args[0]-$args[1]")
     public String testSelect(String param, String param2) {
-        return "Hello World! " + param;
+        return "Hello World! " + param + param2;
+    }
+
+    @CacheClear(value = "DemoCache", cacheKey = "$args[0]-$args[1]")
+    public boolean testClear(String param, String param2) {
+        return true;
+    }
+
+    @CacheClear(value = "DemoCache", cacheKeyList = "$args[0]")
+    public boolean testClearByList(List<String> param) {
+        return true;
+    }
+
+    @CacheClear(value = "DemoCache", cacheKeyRegularExpression = "$args[0].*")
+    public boolean testClearByRegularExpression(String param, String param2) {
+        return true;
     }
 
 }
