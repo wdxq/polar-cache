@@ -30,10 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wdxq liu.shenq@gmail.com
@@ -65,7 +63,10 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
             throw new CacheNameNotFoundException();
         }
 
-        List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : List.of(args);
+        List<Object> argsList =
+                (args == null || args.length == 0) ?
+                        Collections.emptyList()
+                        : Arrays.stream(args).collect(Collectors.toList());
 
         Object result = null;
 
