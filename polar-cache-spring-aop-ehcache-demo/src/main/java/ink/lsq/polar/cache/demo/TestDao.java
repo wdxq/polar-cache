@@ -33,6 +33,11 @@ public class TestDao {
         return "Hello World! " + param + param2;
     }
 
+    @CacheAble(value = "DemoCache")
+    public String testSelectNoMethodParam() {
+        return "Hello World!";
+    }
+
     @CacheClear(value = "DemoCache", cacheKey = "$args[0]-$args[1]")
     public boolean testClear(String param, String param2) {
         return true;

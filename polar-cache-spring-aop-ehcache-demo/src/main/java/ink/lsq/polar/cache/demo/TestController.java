@@ -18,6 +18,7 @@ package ink.lsq.polar.cache.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -36,8 +37,13 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public TestResponse test(String param, String param2) {
+    public TestResponse test(@RequestParam(required = false) String param, @RequestParam(required = false) String param2) {
         return new TestResponse(testDao.testSelect(param, param2));
+    }
+
+    @GetMapping("/testSelectNoMethodParam")
+    public TestResponse testSelectNoMethodParam() {
+        return new TestResponse(testDao.testSelectNoMethodParam());
     }
 
     @GetMapping("/testClear")

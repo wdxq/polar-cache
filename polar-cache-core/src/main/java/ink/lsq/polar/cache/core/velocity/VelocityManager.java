@@ -16,6 +16,7 @@
 
 package ink.lsq.polar.cache.core.velocity;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
@@ -76,7 +77,19 @@ public class VelocityManager {
         Map<String, Object> param = new HashMap<>();
         StringWriter out = null;
         try {
-            param.put(VelocityConstant.PARAM_ARGS_KEY, args);
+            Object[] copyArgs;
+            if (null != args && args.length > 0) {
+                copyArgs = new Object[args.length];
+                System.arraycopy(args, 0, copyArgs, 0, args.length);
+                for (int i = 0; i < copyArgs.length; i++) {
+                    if (copyArgs[i] == null) {
+                        copyArgs[i] = StringUtils.EMPTY;
+                    }
+                }
+            } else {
+                copyArgs = args;
+            }
+            param.put(VelocityConstant.PARAM_ARGS_KEY, copyArgs);
             VelocityContext velocityContext = new VelocityContext(param);
             out = new StringWriter();
             Velocity.evaluate(
