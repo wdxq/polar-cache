@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 wdxq liu.shenq@gmail.com
+ * Copyright 2020 wdxq liu.shenq@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package ink.lsq.polar.cache.core.proxy;
+package ink.lsq.polar.cache.core.anno;
 
-import ink.lsq.polar.cache.core.anno.CacheAble;
-import ink.lsq.polar.cache.core.anno.CacheClear;
-
-import java.lang.reflect.Method;
+import java.lang.annotation.*;
 
 /**
  * @author wdxq liu.shenq@gmail.com
  */
-public interface PolarCacheProxyAbility {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface CacheClearBatch {
 
-    Object cacheAbleProcess(CacheAble cacheAble, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
-
-    Object cacheClearProcess(CacheClear[] cacheClearArray, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable;
+    CacheClear[] value() default {};
 
 }

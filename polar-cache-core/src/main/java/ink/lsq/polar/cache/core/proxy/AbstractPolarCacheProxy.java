@@ -139,7 +139,7 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
     }
 
     @Override
-    public Object cacheClearProcess(CacheClear cacheClear, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable {
+    public Object cacheClearProcess(CacheClear[] cacheClearArray, Method method, Object[] args, MethodInvokeCallBack action) throws Throwable {
 
         if (null == velocityManager) {
             velocityManager = PolarCacheManager.getInstance().getVelocityManager();
@@ -148,69 +148,88 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
             cacheClearProcessList = PolarCacheManager.getInstance().getCacheClearProcessList();
         }
 
-        if (StringUtils.isBlank(cacheClear.value())) {
-            throw new CacheNameNotFoundException();
+        if (cacheClearArray == null || cacheClearArray.length == 0) {
+            return action.doInPolarCacheProxy();
         }
 
         Object result = null;
         Throwable methodCallException = null;
+        boolean methodCalled = false;
 
-        if (cacheClear.clearWhenExceptionIsThrown().length > 0) {
-            try {
-                result = action.doInPolarCacheProxy();
-            } catch (Throwable e) {
-                for (Class<? extends Throwable> aClass : cacheClear.clearWhenExceptionIsThrown()) {
-                    if (aClass.isInstance(e)) {
-                        methodCallException = e;
-                        break;
+        for (CacheClear cacheClear : cacheClearArray) {
+
+            if (StringUtils.isBlank(cacheClear.value())) {
+                throw new CacheNameNotFoundException();
+            }
+
+            if (cacheClear.clearWhenExceptionIsThrown().length > 0) {
+                if (!methodCalled) {
+                    try {
+                        result = action.doInPolarCacheProxy();
+                    } catch (Throwable e) {
+                        for (Class<? extends Throwable> aClass : cacheClear.clearWhenExceptionIsThrown()) {
+                            if (aClass.isInstance(e)) {
+                                methodCallException = e;
+                                break;
+                            }
+                        }
+                        if (methodCallException == null) {
+                            throw e;
+                        }
+                    } finally {
+                        methodCalled = true;
                     }
                 }
-                if (methodCallException == null) {
-                    throw e;
+            } else {
+                if (!methodCalled) {
+                    try {
+                        result = action.doInPolarCacheProxy();
+                    } finally {
+                        methodCalled = true;
+                    }
                 }
             }
-        } else {
-            result = action.doInPolarCacheProxy();
-        }
 
-        if (cacheClear.valBooleanReturn() && !((result instanceof Boolean) && (Boolean) result)) {
+            if (cacheClear.valBooleanReturn() && !((result instanceof Boolean) && (Boolean) result)) {
+                if (null != methodCallException) {
+                    throw methodCallException;
+                }
+                return result;
+            }
+
+            List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : List.of(args);
+
+            Set<String> cacheKey = new HashSet<>();
+            String cacheKeyRegularExpression = StringUtils.EMPTY;
+            if (StringUtils.isNotBlank(cacheClear.cacheKey())) {
+                cacheKey.add(velocityManager.evaluateForString(cacheClear.cacheKey(), args));
+            }
+            if (StringUtils.isNotBlank(cacheClear.cacheKeyList())) {
+                cacheKey.addAll(velocityManager.evaluateForSet(cacheClear.cacheKeyList(), args));
+            }
+            if (StringUtils.isNotBlank(cacheClear.cacheKeyRegularExpression())) {
+                cacheKeyRegularExpression = velocityManager.evaluateForString(cacheClear.cacheKeyRegularExpression(), args);
+            }
+
+            boolean clearResult = true;
+            for (int i = cacheClearProcessList.size() - 1; clearResult && i >= 0; i--) {
+
+                clearResult = cacheClearProcessList.get(i).clear(new CacheClearProcessParam(
+                        cacheClear.value(),
+                        argsList,
+                        StringUtils.EMPTY.equals(cacheClear.cacheKey())
+                                && StringUtils.EMPTY.equals(cacheClear.cacheKeyList())
+                                && StringUtils.EMPTY.equals(cacheClear.cacheKeyRegularExpression()),
+                        cacheKey,
+                        cacheKeyRegularExpression
+                ));
+
+            }
+
             if (null != methodCallException) {
                 throw methodCallException;
             }
-            return result;
-        }
 
-        List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : List.of(args);
-
-        Set<String> cacheKey = new HashSet<>();
-        String cacheKeyRegularExpression = StringUtils.EMPTY;
-        if (StringUtils.isNotBlank(cacheClear.cacheKey())) {
-            cacheKey.add(velocityManager.evaluateForString(cacheClear.cacheKey(), args));
-        }
-        if (StringUtils.isNotBlank(cacheClear.cacheKeyList())) {
-            cacheKey.addAll(velocityManager.evaluateForSet(cacheClear.cacheKeyList(), args));
-        }
-        if (StringUtils.isNotBlank(cacheClear.cacheKeyRegularExpression())) {
-            cacheKeyRegularExpression = velocityManager.evaluateForString(cacheClear.cacheKeyRegularExpression(), args);
-        }
-
-        boolean clearResult = true;
-        for (int i = cacheClearProcessList.size() - 1; clearResult && i >= 0; i--) {
-
-            clearResult = cacheClearProcessList.get(i).clear(new CacheClearProcessParam(
-                    cacheClear.value(),
-                    argsList,
-                    StringUtils.EMPTY.equals(cacheClear.cacheKey())
-                            && StringUtils.EMPTY.equals(cacheClear.cacheKeyList())
-                            && StringUtils.EMPTY.equals(cacheClear.cacheKeyRegularExpression()),
-                    cacheKey,
-                    cacheKeyRegularExpression
-            ));
-
-        }
-
-        if (null != methodCallException) {
-            throw methodCallException;
         }
 
         return result;

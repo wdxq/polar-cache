@@ -18,6 +18,7 @@ package ink.lsq.polar.cache.proxy.spring.aop;
 
 import ink.lsq.polar.cache.core.anno.CacheAble;
 import ink.lsq.polar.cache.core.anno.CacheClear;
+import ink.lsq.polar.cache.core.anno.CacheClearBatch;
 import ink.lsq.polar.cache.core.proxy.AbstractPolarCacheProxy;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -46,7 +47,19 @@ public class PolarCacheAspect extends AbstractPolarCacheProxy {
     public Object cacheClear(ProceedingJoinPoint proceedingJoinPoint, CacheClear cacheClear) throws Throwable {
 
         return cacheClearProcess(
-                cacheClear,
+                new CacheClear[]{cacheClear},
+                ((MethodSignature) proceedingJoinPoint.getSignature()).getMethod(),
+                proceedingJoinPoint.getArgs(),
+                () -> proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs())
+        );
+
+    }
+
+    @Around("@annotation(cacheClearBatch)")
+    public Object cacheClearBatch(ProceedingJoinPoint proceedingJoinPoint, CacheClearBatch cacheClearBatch) throws Throwable {
+
+        return cacheClearProcess(
+                cacheClearBatch.value(),
                 ((MethodSignature) proceedingJoinPoint.getSignature()).getMethod(),
                 proceedingJoinPoint.getArgs(),
                 () -> proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs())

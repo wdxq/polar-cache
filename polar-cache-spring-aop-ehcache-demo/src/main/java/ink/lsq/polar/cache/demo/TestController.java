@@ -81,4 +81,9 @@ public class TestController {
         }
     }
 
+    @GetMapping("/testClearCacheBatch")
+    public TestResponse testClearCacheBatch(@RequestParam(required = false) String param, @RequestParam(required = false) String param2) {
+        return new TestResponse(String.valueOf(testDao.testClearCacheBatch(param, param2)));
+    }
+
 }

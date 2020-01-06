@@ -18,6 +18,7 @@ package ink.lsq.polar.cache.demo;
 
 import ink.lsq.polar.cache.core.anno.CacheAble;
 import ink.lsq.polar.cache.core.anno.CacheClear;
+import ink.lsq.polar.cache.core.anno.CacheClearBatch;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -66,6 +67,14 @@ public class TestDao {
     @CacheClear(value = "DemoCache", clearWhenExceptionIsThrown = {RuntimeException.class, CustomException.class})
     public boolean testClearWhenExceptionIsThrown() throws Exception {
         throw new Exception();
+    }
+
+    @CacheClearBatch({
+            @CacheClear(value = "DemoCache", cacheKey = "$args[0]"),
+            @CacheClear(value = "DemoCache", cacheKey = "$args[1]")
+    })
+    public boolean testClearCacheBatch(String param, String param2) {
+        return true;
     }
 
 }
