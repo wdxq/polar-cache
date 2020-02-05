@@ -38,6 +38,7 @@
         <module>polar-cache-spring-boot-autoconfigure</module>
         <module>polar-cache-spring-aop-ehcache-starter</module>
         <module>polar-cache-spring-aop-ehcache-demo</module>
+        <module>polar-cache-redis</module>
     </modules>
 
     <dependencies>
