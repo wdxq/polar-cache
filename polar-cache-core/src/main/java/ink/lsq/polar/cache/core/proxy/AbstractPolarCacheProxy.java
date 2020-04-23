@@ -25,6 +25,7 @@ import ink.lsq.polar.cache.core.bean.CacheClearProcessParam;
 import ink.lsq.polar.cache.core.process.CacheAbleProcess;
 import ink.lsq.polar.cache.core.process.CacheClearProcess;
 import ink.lsq.polar.cache.core.velocity.VelocityManager;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,7 +198,7 @@ public abstract class AbstractPolarCacheProxy implements PolarCacheProxyAbility 
                 return result;
             }
 
-            List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : List.of(args);
+            List<Object> argsList = (args == null || args.length == 0) ? Collections.emptyList() : Arrays.asList(args);
 
             Set<String> cacheKey = new HashSet<>();
             String cacheKeyRegularExpression = StringUtils.EMPTY;
