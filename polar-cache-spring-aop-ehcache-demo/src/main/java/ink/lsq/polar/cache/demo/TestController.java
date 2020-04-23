@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,7 +54,7 @@ public class TestController {
 
     @GetMapping("/testClearByList")
     public TestResponse testClearByList(String param, String param2) {
-        return new TestResponse(String.valueOf(testDao.testClearByList(List.of(param, param2))));
+        return new TestResponse(String.valueOf(testDao.testClearByList(Arrays.asList(param, param2))));
     }
 
     @GetMapping("/testClearByRegularExpression")
