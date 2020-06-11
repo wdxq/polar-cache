@@ -22,7 +22,7 @@ public class PolarCacheSpringAopEhcacheDemo {
 
 }
 ```
-- 为项目添加EhCache3配置
+- 为项目添加`Ehcache3`配置文件`ehcache.xml`
 ```xml
 <ehcache:config xmlns:ehcache="http://www.ehcache.org/v3">
 
@@ -33,6 +33,13 @@ public class PolarCacheSpringAopEhcacheDemo {
     </ehcache:cache>
 
 </ehcache:config>
+```
+- 在Spring配置文件中定位`Ehcache3`配置文件
+```yaml
+polar:
+  cache:
+    ehcache:
+      xmlFile: /ehcache.xml
 ```
 - 数据层使用示例
 ```java
